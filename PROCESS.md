@@ -15,7 +15,7 @@ Either of us can work anywhere in the code. "Main area" just says who decides wh
 
 - **What to build:** `docs/Forkful_SRS.docx`
 - **What's being worked on now:** the project board
-- **What's finished overall:** `docs/requirements.md`, the checklist of every REQ, NFR, and BR
+- **List of every REQ, NFR, and BR:** `docs/requirements.md`
 - **Why we chose something:** `docs/decisions.md`
 
 If the code needs to differ from the SRS, update the SRS (and add a revision history row) or note the difference in `decisions.md`. Don't let the two quietly drift apart.
@@ -44,7 +44,7 @@ Rules:
 - **Drag the card to Done** yourself once its PR is merged and the change works on the deployed site. Paste the PR link into the card so the work is easy to find later.
 - At the weekly check-in, review the board together, reorder the Backlog, and pick what's next.
 
-The board shows day-to-day work. `requirements.md` is the long-term record: when a card reaches Done, tick its requirements off there too.
+Use `requirements.md` to look up the requirement IDs for a card. The board is the only place progress is tracked.
 
 ### Suggested build order
 
