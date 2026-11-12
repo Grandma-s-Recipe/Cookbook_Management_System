@@ -2,7 +2,7 @@
 
 Forkful is a web app for home cooks. You can browse a public recipe catalog, save a copy of any recipe and edit it without changing the original, add your own private recipes by typing them in or scanning a printed recipe, and keep everything in a personal Library.
 
-CS445 class project · Team: Grandma's Recipe · Requirements: [`docs/Forkful_SRS_v1.9.docx`](docs/Forkful_SRS.docx)
+CS445 class project · Team: Grandma's Recipe · Requirements: [`docs/Forkful_SRS.docx`](docs/Forkful_SRS.docx)
 
 ## Features (v1.0)
 
