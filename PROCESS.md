@@ -13,7 +13,7 @@ Either of us can work anywhere in the code. "Main area" just says who decides wh
 
 ## Source of truth
 
-- **What to build:** `docs/Forkful_SRS.docx`
+- **What to build:** `docs/Forkful_SRS.pdf`
 - **What's being worked on now:** the project board
 - **List of every REQ, NFR, and BR:** `docs/requirements.md`
 - **Why we chose something:** `docs/decisions.md`

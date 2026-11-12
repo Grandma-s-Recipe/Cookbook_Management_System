@@ -1,6 +1,6 @@
 # Forkful requirements
 
-Every requirement from `docs/Forkful_SRS_v1.9.docx` in one list, for quick reference. Progress is tracked on the project board: put the requirement IDs on each card.
+Every requirement from `docs/Forkful_SRS.pdf` in one list, for quick reference. Progress is tracked on the project board: put the requirement IDs on each card.
 
 The SRS is the full source; the wording here is shortened in places. If the two disagree, the SRS wins.
 
