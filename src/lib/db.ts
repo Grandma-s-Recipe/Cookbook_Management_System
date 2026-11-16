@@ -12,9 +12,10 @@
 // Values in ${ } are sent as parameters, never pasted into the SQL,
 // so this style is safe from SQL injection.
 
-import { neon } from '@neondatabase/serverless'
+import { neon, type NeonQueryFunction } from '@neondatabase/serverless'
 
-type Sql = ReturnType<typeof neon>
+// Default mode: each query returns an array of row objects.
+type Sql = NeonQueryFunction<false, false>
 
 function connect(envName: string): Sql {
   const url = process.env[envName]
