@@ -1,0 +1,320 @@
+{
+  "_readme": "Starting catalog (REQ-1.10). Recipes written by the Forkful team in our own words. To add one: copy an entry, give it a unique slug, and run `npm run db:seed`. Allowed units are listed in scripts/lib/seed-validate.mjs. quantity is a number (0.5 for 1/2), or null for 'to taste'. quantity_max is only for ranges like 2-3. raw_text is optional; the script builds it if missing. Photos must be ours or freely licensed (BR-12); leave photo fields out until then.",
+  "recipes": [
+    {
+      "slug": "garlic-butter-pasta",
+      "title": "Garlic Butter Pasta",
+      "description": "A quick weeknight pasta with garlic, butter, and parmesan.",
+      "cuisine": "Italian",
+      "tags": ["pasta", "quick", "vegetarian"],
+      "servings": 4,
+      "prep_minutes": 5,
+      "cook_minutes": 15,
+      "ingredients": [
+        { "quantity": 1, "unit": "lb", "name": "spaghetti" },
+        { "quantity": 6, "unit": "tbsp", "name": "butter" },
+        { "quantity": 5, "unit": "clove", "name": "garlic", "note": "minced" },
+        { "quantity": 0.5, "unit": "cup", "name": "grated parmesan" },
+        { "quantity": 2, "unit": "tbsp", "name": "chopped parsley" },
+        { "quantity": null, "unit": null, "name": "salt and pepper", "note": "to taste" }
+      ],
+      "steps": [
+        "Cook the spaghetti in well-salted boiling water until al dente. Save 1/2 cup of the pasta water, then drain.",
+        "Melt the butter in a large pan over medium-low heat. Add the garlic and cook for 1 to 2 minutes until fragrant but not browned.",
+        "Add the pasta to the pan with a splash of the pasta water and toss to coat.",
+        "Stir in the parmesan and parsley, adding more pasta water if it looks dry. Season with salt and pepper."
+      ]
+    },
+    {
+      "slug": "classic-pancakes",
+      "title": "Classic Pancakes",
+      "description": "Fluffy breakfast pancakes from pantry staples.",
+      "cuisine": "American",
+      "tags": ["breakfast", "vegetarian"],
+      "servings": 4,
+      "prep_minutes": 10,
+      "cook_minutes": 15,
+      "ingredients": [
+        { "quantity": 1.5, "unit": "cup", "name": "all-purpose flour" },
+        { "quantity": 2, "unit": "tbsp", "name": "sugar" },
+        { "quantity": 2, "unit": "tsp", "name": "baking powder" },
+        { "quantity": 0.5, "unit": "tsp", "name": "salt" },
+        { "quantity": 1.25, "unit": "cup", "name": "milk" },
+        { "quantity": 1, "unit": null, "name": "egg" },
+        { "quantity": 3, "unit": "tbsp", "name": "butter", "note": "melted" }
+      ],
+      "steps": [
+        "Whisk the flour, sugar, baking powder, and salt in a large bowl.",
+        "In another bowl, whisk the milk, egg, and melted butter.",
+        "Pour the wet ingredients into the dry ones and stir just until combined. A few lumps are fine.",
+        "Heat a lightly greased pan over medium heat. Pour about 1/4 cup of batter per pancake.",
+        "Cook until bubbles form on top, about 2 minutes, then flip and cook 1 to 2 minutes more."
+      ]
+    },
+    {
+      "slug": "chicken-fried-rice",
+      "title": "Chicken Fried Rice",
+      "description": "Leftover rice turned into a fast one-pan dinner.",
+      "cuisine": "Chinese",
+      "tags": ["rice", "quick", "one-pan"],
+      "servings": 4,
+      "prep_minutes": 10,
+      "cook_minutes": 15,
+      "ingredients": [
+        { "quantity": 4, "unit": "cup", "name": "cooked rice", "note": "day-old is best" },
+        { "quantity": 12, "unit": "oz", "name": "chicken breast", "note": "diced" },
+        { "quantity": 2, "unit": null, "name": "eggs", "note": "beaten" },
+        { "quantity": 1, "unit": "cup", "name": "frozen peas and carrots" },
+        { "quantity": 3, "unit": null, "name": "green onions", "note": "sliced" },
+        { "quantity": 3, "unit": "tbsp", "name": "soy sauce" },
+        { "quantity": 2, "unit": "tbsp", "name": "vegetable oil" },
+        { "quantity": 1, "unit": "tsp", "name": "sesame oil" }
+      ],
+      "steps": [
+        "Heat 1 tablespoon of the vegetable oil in a large skillet or wok over high heat. Cook the chicken until no longer pink, about 5 minutes, then move it to a plate.",
+        "Add the rest of the oil. Pour in the eggs and scramble until just set, then push them to the side.",
+        "Add the peas and carrots and cook for 2 minutes.",
+        "Add the rice, breaking up any clumps, and stir-fry for 3 minutes.",
+        "Return the chicken, add the soy sauce and sesame oil, and toss. Top with green onions."
+      ]
+    },
+    {
+      "slug": "black-bean-tacos",
+      "title": "Black Bean Tacos",
+      "description": "Smoky black bean tacos with a quick lime slaw.",
+      "cuisine": "Mexican",
+      "tags": ["tacos", "vegetarian", "quick"],
+      "servings": 4,
+      "prep_minutes": 10,
+      "cook_minutes": 10,
+      "ingredients": [
+        { "quantity": 2, "unit": "can", "name": "black beans", "note": "15 oz each, drained and rinsed" },
+        { "quantity": 1, "unit": "tsp", "name": "ground cumin" },
+        { "quantity": 1, "unit": "tsp", "name": "smoked paprika" },
+        { "quantity": 0.5, "unit": "cup", "name": "water" },
+        { "quantity": 8, "unit": null, "name": "small corn tortillas" },
+        { "quantity": 2, "unit": "cup", "name": "shredded cabbage" },
+        { "quantity": 1, "unit": null, "name": "lime", "note": "juiced" },
+        { "quantity": null, "unit": null, "name": "salt", "note": "to taste" }
+      ],
+      "steps": [
+        "Put the beans, cumin, paprika, and water in a saucepan over medium heat. Simmer for 5 minutes, mashing about half the beans.",
+        "Toss the cabbage with the lime juice and a pinch of salt.",
+        "Warm the tortillas in a dry pan for about 30 seconds per side.",
+        "Fill each tortilla with beans and top with the slaw."
+      ]
+    },
+    {
+      "slug": "tomato-basil-soup",
+      "title": "Tomato Basil Soup",
+      "description": "A smooth tomato soup made with canned tomatoes.",
+      "cuisine": "American",
+      "tags": ["soup", "vegetarian"],
+      "servings": 4,
+      "prep_minutes": 10,
+      "cook_minutes": 30,
+      "ingredients": [
+        { "quantity": 2, "unit": "tbsp", "name": "olive oil" },
+        { "quantity": 1, "unit": null, "name": "onion", "note": "chopped" },
+        { "quantity": 3, "unit": "clove", "name": "garlic", "note": "minced" },
+        { "quantity": 2, "unit": "can", "name": "whole tomatoes", "note": "28 oz each" },
+        { "quantity": 2, "unit": "cup", "name": "vegetable broth" },
+        { "quantity": 0.5, "unit": "cup", "name": "fresh basil leaves" },
+        { "quantity": 0.5, "unit": "cup", "name": "heavy cream", "note": "optional" },
+        { "quantity": null, "unit": null, "name": "salt and pepper", "note": "to taste" }
+      ],
+      "steps": [
+        "Heat the olive oil in a pot over medium heat. Cook the onion for 5 minutes until soft, then add the garlic for 1 minute.",
+        "Add the tomatoes with their juice and the broth. Simmer for 20 minutes.",
+        "Add the basil and blend until smooth.",
+        "Stir in the cream if using, and season with salt and pepper."
+      ]
+    },
+    {
+      "slug": "chocolate-chip-cookies",
+      "title": "Chocolate Chip Cookies",
+      "description": "Chewy cookies with crisp edges.",
+      "cuisine": "American",
+      "tags": ["dessert", "baking"],
+      "servings": 24,
+      "prep_minutes": 15,
+      "cook_minutes": 12,
+      "ingredients": [
+        { "quantity": 2.25, "unit": "cup", "name": "all-purpose flour" },
+        { "quantity": 1, "unit": "tsp", "name": "baking soda" },
+        { "quantity": 1, "unit": "tsp", "name": "salt" },
+        { "quantity": 1, "unit": "cup", "name": "butter", "note": "softened" },
+        { "quantity": 0.75, "unit": "cup", "name": "granulated sugar" },
+        { "quantity": 0.75, "unit": "cup", "name": "brown sugar", "note": "packed" },
+        { "quantity": 2, "unit": null, "name": "eggs" },
+        { "quantity": 2, "unit": "tsp", "name": "vanilla extract" },
+        { "quantity": 2, "unit": "cup", "name": "chocolate chips" }
+      ],
+      "steps": [
+        "Heat the oven to 375°F and line two baking sheets with parchment.",
+        "Whisk the flour, baking soda, and salt in a bowl.",
+        "Beat the butter and both sugars until fluffy. Beat in the eggs one at a time, then the vanilla.",
+        "Mix in the flour mixture on low speed, then stir in the chocolate chips.",
+        "Drop rounded tablespoons of dough 2 inches apart. Bake for 9 to 11 minutes until the edges are golden.",
+        "Cool on the sheet for 5 minutes before moving to a rack."
+      ]
+    },
+    {
+      "slug": "greek-salad",
+      "title": "Greek Salad",
+      "description": "Crisp vegetables, olives, and feta with a lemon-oregano dressing.",
+      "cuisine": "Greek",
+      "tags": ["salad", "vegetarian", "no-cook"],
+      "servings": 4,
+      "prep_minutes": 15,
+      "cook_minutes": 0,
+      "ingredients": [
+        { "quantity": 1, "unit": null, "name": "cucumber", "note": "chopped" },
+        { "quantity": 3, "unit": null, "name": "tomatoes", "note": "cut into wedges" },
+        { "quantity": 0.5, "unit": null, "name": "red onion", "note": "thinly sliced" },
+        { "quantity": 0.5, "unit": "cup", "name": "kalamata olives" },
+        { "quantity": 4, "unit": "oz", "name": "feta cheese" },
+        { "quantity": 3, "unit": "tbsp", "name": "olive oil" },
+        { "quantity": 1, "unit": "tbsp", "name": "lemon juice" },
+        { "quantity": 1, "unit": "tsp", "name": "dried oregano" }
+      ],
+      "steps": [
+        "Combine the cucumber, tomatoes, onion, and olives in a large bowl.",
+        "Whisk the olive oil, lemon juice, and oregano, then pour over the salad and toss.",
+        "Top with the feta, in one piece or crumbled."
+      ]
+    },
+    {
+      "slug": "beef-chili",
+      "title": "Beef Chili",
+      "description": "A hearty one-pot chili with beans.",
+      "cuisine": "American",
+      "tags": ["one-pot", "comfort food"],
+      "servings": 6,
+      "prep_minutes": 15,
+      "cook_minutes": 60,
+      "ingredients": [
+        { "quantity": 1, "unit": "tbsp", "name": "vegetable oil" },
+        { "quantity": 2, "unit": "lb", "name": "ground beef" },
+        { "quantity": 1, "unit": null, "name": "onion", "note": "diced" },
+        { "quantity": 4, "unit": "clove", "name": "garlic", "note": "minced" },
+        { "quantity": 3, "unit": "tbsp", "name": "chili powder" },
+        { "quantity": 2, "unit": "tsp", "name": "ground cumin" },
+        { "quantity": 1, "unit": "can", "name": "crushed tomatoes", "note": "28 oz" },
+        { "quantity": 2, "unit": "can", "name": "kidney beans", "note": "15 oz each, drained" },
+        { "quantity": 1, "unit": "cup", "name": "beef broth" },
+        { "quantity": null, "unit": null, "name": "salt", "note": "to taste" }
+      ],
+      "steps": [
+        "Heat the oil in a large pot over medium-high heat. Brown the beef, breaking it up, then drain off extra fat.",
+        "Add the onion and cook for 5 minutes. Add the garlic, chili powder, and cumin and cook for 1 minute.",
+        "Stir in the tomatoes, beans, and broth. Bring to a boil, then lower the heat.",
+        "Simmer uncovered for 45 minutes, stirring now and then. Season with salt."
+      ]
+    },
+    {
+      "slug": "banana-bread",
+      "title": "Banana Bread",
+      "description": "Moist banana bread for overripe bananas.",
+      "cuisine": "American",
+      "tags": ["baking", "breakfast", "vegetarian"],
+      "servings": 10,
+      "prep_minutes": 15,
+      "cook_minutes": 60,
+      "ingredients": [
+        { "quantity": 3, "unit": null, "name": "ripe bananas", "note": "mashed" },
+        { "quantity": 0.3333, "unit": "cup", "name": "butter", "note": "melted" },
+        { "quantity": 0.75, "unit": "cup", "name": "sugar" },
+        { "quantity": 1, "unit": null, "name": "egg", "note": "beaten" },
+        { "quantity": 1, "unit": "tsp", "name": "vanilla extract" },
+        { "quantity": 1, "unit": "tsp", "name": "baking soda" },
+        { "quantity": 1, "unit": "pinch", "name": "salt" },
+        { "quantity": 1.5, "unit": "cup", "name": "all-purpose flour" }
+      ],
+      "steps": [
+        "Heat the oven to 350°F and grease a 9 by 5 inch loaf pan.",
+        "Mix the bananas and melted butter. Stir in the sugar, egg, and vanilla.",
+        "Sprinkle the baking soda and salt over the mixture and stir, then mix in the flour.",
+        "Pour into the pan and bake for 55 to 65 minutes, until a toothpick comes out clean.",
+        "Cool in the pan for 10 minutes, then turn out onto a rack."
+      ]
+    },
+    {
+      "slug": "chickpea-curry",
+      "title": "Chickpea Curry",
+      "description": "A creamy coconut curry with chickpeas and spinach.",
+      "cuisine": "Indian",
+      "tags": ["curry", "vegan", "one-pot"],
+      "servings": 4,
+      "prep_minutes": 10,
+      "cook_minutes": 25,
+      "ingredients": [
+        { "quantity": 2, "unit": "tbsp", "name": "vegetable oil" },
+        { "quantity": 1, "unit": null, "name": "onion", "note": "diced" },
+        { "quantity": 3, "unit": "clove", "name": "garlic", "note": "minced" },
+        { "quantity": 1, "unit": "tbsp", "name": "grated ginger" },
+        { "quantity": 2, "unit": "tbsp", "name": "curry powder" },
+        { "quantity": 2, "unit": "can", "name": "chickpeas", "note": "15 oz each, drained" },
+        { "quantity": 1, "unit": "can", "name": "coconut milk", "note": "13.5 oz" },
+        { "quantity": 1, "unit": "can", "name": "diced tomatoes", "note": "14.5 oz" },
+        { "quantity": 3, "unit": "cup", "name": "baby spinach" },
+        { "quantity": null, "unit": null, "name": "salt", "note": "to taste" }
+      ],
+      "steps": [
+        "Heat the oil in a large pan over medium heat. Cook the onion for 5 minutes until soft.",
+        "Add the garlic, ginger, and curry powder and cook for 1 minute.",
+        "Add the chickpeas, coconut milk, and tomatoes. Simmer for 15 minutes until slightly thickened.",
+        "Stir in the spinach until wilted, and season with salt. Serve with rice."
+      ]
+    },
+    {
+      "slug": "roasted-vegetables",
+      "title": "Sheet Pan Roasted Vegetables",
+      "description": "Mixed vegetables roasted until caramelized.",
+      "cuisine": "Mediterranean",
+      "tags": ["side dish", "vegan", "sheet pan"],
+      "servings": 4,
+      "prep_minutes": 15,
+      "cook_minutes": 30,
+      "ingredients": [
+        { "quantity": 2, "unit": "cup", "name": "broccoli florets" },
+        { "quantity": 2, "unit": null, "name": "carrots", "note": "sliced" },
+        { "quantity": 1, "unit": null, "name": "red bell pepper", "note": "chopped" },
+        { "quantity": 1, "unit": null, "name": "zucchini", "note": "sliced" },
+        { "quantity": 3, "unit": "tbsp", "name": "olive oil" },
+        { "quantity": 1, "unit": "tsp", "name": "garlic powder" },
+        { "quantity": 1, "unit": "tsp", "name": "salt" },
+        { "quantity": 0.5, "unit": "tsp", "name": "black pepper" }
+      ],
+      "steps": [
+        "Heat the oven to 425°F.",
+        "Toss all the vegetables with the olive oil, garlic powder, salt, and pepper.",
+        "Spread in a single layer on a large baking sheet.",
+        "Roast for 25 to 30 minutes, stirring halfway, until tender and browned at the edges."
+      ]
+    },
+    {
+      "slug": "overnight-oats",
+      "title": "Overnight Oats",
+      "description": "No-cook oats you make the night before.",
+      "cuisine": "American",
+      "tags": ["breakfast", "no-cook", "vegetarian"],
+      "servings": 1,
+      "prep_minutes": 5,
+      "cook_minutes": 0,
+      "ingredients": [
+        { "quantity": 0.5, "unit": "cup", "name": "rolled oats" },
+        { "quantity": 0.5, "unit": "cup", "name": "milk" },
+        { "quantity": 0.25, "unit": "cup", "name": "plain yogurt" },
+        { "quantity": 1, "unit": "tbsp", "name": "chia seeds" },
+        { "quantity": 1, "unit": "tbsp", "name": "honey" },
+        { "quantity": 0.5, "unit": "cup", "name": "berries" }
+      ],
+      "steps": [
+        "Stir the oats, milk, yogurt, chia seeds, and honey together in a jar.",
+        "Cover and refrigerate overnight, or for at least 4 hours.",
+        "Top with berries before serving."
+      ]
+    }
+  ]
+}

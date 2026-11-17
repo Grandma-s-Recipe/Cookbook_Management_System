@@ -58,7 +58,7 @@ Every choice is limited by two constraints. **Everything has to run at $0 with n
 - **Why:** about 6,500 recipe photos fit in the free 1 GB, and lists load quickly because they only fetch thumbnails (NFR-3).
 - **Rejected:** photos in the database (would fill Neon's 0.5 GB quickly); full-size photos (a few hundred would fill the free limit); Cloudflare R2 (more space, but another account and service).
 
-## 8. Email: Resend
+## 8. Email: Resend (replaced by Brevo, see decision 16)
 
 - **Choice:** Resend's free plan, sending through its HTTPS API.
 - **Why:** sends verification and password-reset emails free, up to 3,000 a month and 100 a day.
@@ -106,6 +106,46 @@ Every choice is limited by two constraints. **Everything has to run at $0 with n
 
 - **Choice:** v1.0 builds the 13 features in SRS §4. Everything else waits in SRS Appendix E: Trash, favorites, collections, a Content Curator role, account lockout, an audit log, data export, revert, a crawler, a paid tier, handwriting OCR, and volume-to-weight conversion.
 - **Why:** keeps the build to one web app, one database, and one photo store, which all fit free plans and leave time to test the core.
+
+## 16. 2026-11-15: Email switched from Resend to Brevo
+
+- **Choice:** Brevo's free plan, called through its HTTPS API (`src/lib/email.ts`). We verify one sender address in Brevo; no domain is needed.
+- **Why:** without a verified domain, Resend only delivers to the account owner's own address, and a domain costs money every year. Brevo's free plan sends 300 emails a day to anyone, with no card and no end date, and only asks us to confirm the "from" address.
+- **Trade-offs:** free emails include a small "Sent with Brevo" footer. Mail sent from a personal address (such as Gmail) through another service is more likely to land in spam, so the site tells users to check their spam folder. If we ever buy a domain, verify it in Brevo and change `EMAIL_FROM`; no code changes.
+- **Local development:** if `BREVO_API_KEY` isn't set, emails are printed in the terminal instead of sent, so the sign-up flow can be tested without an inbox.
+- **Rejected:** Resend (domain needed to reach other users); Mailjet (needs domain verification); Gmail SMTP with an app password (ties the site to one person's Google account, and SMTP is awkward from serverless functions).
+- **SRS:** §2.8, §3.3, §6.1, and §6.5 still say Resend. Update them in the next SRS revision.
+
+## 17. 2026-11-15: The starting catalog is written by the team
+
+- **Choice:** `db/seed.json` holds recipes the team writes in our own words. They show "Forkful Team" as their source, with an internal ID of `forkful-team:<slug>` instead of a web link. Recipes that do come from a website keep its real `source_url` and `source_site`, which are shown as a link (BR-8).
+- **Why:** copying recipe text from blogs risks their terms of service (BR-3), and we have no permission to reuse their photos (BR-12). Team recipes have no such problem.
+- **How:** `npm run db:seed` checks the whole file first and loads nothing if anything is wrong. It only adds recipes that aren't already in the catalog, so it's safe to run again.
+
+## 18. 2026-11-15: How sessions and email links work
+
+- **Choice:**
+  - Session cookies and email links carry a random 256-bit token. The database stores only an HMAC of it, keyed with `SESSION_SECRET`, so a copy of the database alone can't be used to log in or reset a password.
+  - The session cookie is `httpOnly`, `secure` on the live site, and `SameSite=Lax`.
+  - Sessions end after 30 minutes idle (NFR-15) and always within 12 hours of logging in.
+  - The verification link opens a page with a "Verify my email" button instead of verifying on page load, because email scanners that preview links would otherwise use up the single-use link.
+  - Forms that ask for an email address (resend link, forgot password) give the same answer whether or not an account exists. Sign-up still says when an email is taken (REQ-8.2).
+- **Consequence:** changing `SESSION_SECRET` logs everyone out and cancels all unused email links.
+
+## 19. 2026-11-15: Pages that read live data use `connection()` and `<Suspense>`
+
+- **Choice:** the project has Next.js `cacheComponents` turned on. Any page or component that reads the database or the login cookie on each visit calls `await connection()` (or reads cookies) inside a `<Suspense>` boundary. `export const dynamic` isn't allowed with this setting.
+- **Why:** it's what `cacheComponents` requires, and it lets the rest of each page (layout, headings) load instantly while the live part fills in.
+
+## 20. 2026-11-15: Small additions to the data model
+
+- **Choice:** compared with SRS §6.2, the database adds:
+  - `recipe_ingredient.quantity_max`, for ranges like "2–3 cups" (REQ-4.13)
+  - `users.is_disabled`, for REQ-6.2
+  - `users.age_confirmed_at`, for the 13+ checkbox (REQ-8.3)
+  - `session.token_hash` and `session.created_at`, for decision 18
+  - an `app.settings` table, for decision 12
+- **SRS:** add these to §6.2 and Figure B-9 in the next SRS revision.
 
 ---
 

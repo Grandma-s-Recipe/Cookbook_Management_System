@@ -1,0 +1,65 @@
+# Nightly database backup (§3.5, NFR-12, NFR-26).
+#
+# Runs at about 2:00 AM Central (08:00 UTC; 3 AM during daylight saving time).
+# Dumps the whole Neon database, encrypts it with AES-256, and stores it as a
+# workflow artifact for 7 days, so the last 7 nightly backups are always kept.
+#
+# Needs two repository secrets (Settings → Secrets and variables → Actions):
+#   DATABASE_URL_BACKUP  the OWNER connection string, DIRECT (no "-pooler" in the host)
+#   BACKUP_PASSPHRASE    a long random passphrase; keep a copy somewhere safe, or backups can't be opened
+#
+# Restore: see "Backups" in README.md.
+#
+# Note: GitHub pauses scheduled workflows after 60 days with no repository activity.
+# If backups stop, re-enable this workflow from the Actions tab.
+
+name: Nightly backup
+
+on:
+  schedule:
+    - cron: '0 8 * * *'
+  workflow_dispatch: # lets you run it by hand from the Actions tab
+
+permissions:
+  contents: read
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Install PostgreSQL 18 client
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq postgresql-common
+          sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -y
+          sudo apt-get install -y -qq postgresql-client-18
+          /usr/lib/postgresql/18/bin/pg_dump --version
+
+      - name: Dump and encrypt
+        env:
+          DATABASE_URL_BACKUP: ${{ secrets.DATABASE_URL_BACKUP }}
+          BACKUP_PASSPHRASE: ${{ secrets.BACKUP_PASSPHRASE }}
+        run: |
+          set -euo pipefail
+          if [ -z "$DATABASE_URL_BACKUP" ] || [ -z "$BACKUP_PASSPHRASE" ]; then
+            echo "::error::Add the DATABASE_URL_BACKUP and BACKUP_PASSPHRASE repository secrets."
+            exit 1
+          fi
+          name="forkful-$(date -u +%Y-%m-%d)"
+          /usr/lib/postgresql/18/bin/pg_dump "$DATABASE_URL_BACKUP" \
+              --format=custom --no-owner --file "$name.dump"
+          # The dump is never stored unencrypted (NFR-12).
+          gpg --batch --yes --pinentry-mode loopback --passphrase "$BACKUP_PASSPHRASE" \
+              --symmetric --cipher-algo AES256 --output "$name.dump.gpg" "$name.dump"
+          rm "$name.dump"
+          ls -lh "$name.dump.gpg"
+          echo "BACKUP_NAME=$name" >> "$GITHUB_ENV"
+
+      - name: Save backup (kept 7 days)
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.BACKUP_NAME }}
+          path: ${{ env.BACKUP_NAME }}.dump.gpg
+          retention-days: 7
+          if-no-files-found: error
