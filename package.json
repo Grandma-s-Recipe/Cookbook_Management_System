@@ -8,10 +8,13 @@
     "start": "next start",
     "lint": "eslint",
     "test": "jest",
-    "test:coverage": "jest --coverage"
+    "test:coverage": "jest --coverage",
+    "db:seed": "node --env-file=.env.local scripts/seed.mjs",
+    "db:check": "node --env-file=.env.local scripts/check-db.mjs"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.2.1",
+    "@node-rs/argon2": "^2.2.2",
     "next": "16.4.6",
     "react": "19.3.0",
     "react-dom": "19.3.0"

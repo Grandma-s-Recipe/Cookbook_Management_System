@@ -2,7 +2,6 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { Suspense } from 'react'
 import { UserMenu } from '@/components/UserMenu'
-import './globals.css'
 import './forkful.css'
 
 export const metadata: Metadata = {
