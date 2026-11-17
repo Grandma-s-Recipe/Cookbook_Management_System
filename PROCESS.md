@@ -92,11 +92,10 @@ Review checks:
 
 A requirement is done when:
 
-- [ ] The code is merged into `main` and works on the deployed site
-- [ ] There's a Jest test for it, or a note in `requirements.md` on how it was checked by hand
-- [ ] Its card is in **Done** on the project board
-- [ ] It's ticked off in `docs/requirements.md`, with the test file next to it
-- [ ] The docs are updated, if the work changed setup, environment variables, or a decision
+- The code is merged into `main` and works on the deployed site
+- There's a Jest test for it, or a note on the card saying how it was checked by hand
+- Its card is in **Done** on the project board
+- The docs are updated, if the work changed setup, environment variables, or a decision
 
 ## Testing
 
