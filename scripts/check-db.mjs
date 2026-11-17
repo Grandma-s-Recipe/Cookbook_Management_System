@@ -1,6 +1,8 @@
+// Tests every database connection string in .env.local without printing passwords.
+//   npm run db:check
 import { neon } from '@neondatabase/serverless'
 
-const names = ['DATABASE_URL', 'DATABASE_URL_APP', 'DATABASE_URL_CATALOG_READ']
+const names = ['DATABASE_URL', 'DATABASE_URL_APP', 'DATABASE_URL_CATALOG_READ', 'DATABASE_URL_CATALOG_WRITE']
 
 for (const name of names) {
   const url = process.env[name]
