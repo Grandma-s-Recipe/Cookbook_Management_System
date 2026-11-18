@@ -13,8 +13,8 @@ Either of us can work anywhere in the code. "Main area" just says who decides wh
 
 ## Source of truth
 
-- **What to build:** `docs/Forkful_SRS.pdf`
-- **What's being worked on now:** the project board
+- **What to build:** `docs/Forkful_SRS_v1.9.docx`
+- **Progress (what's planned, in progress, done):** the project board
 - **List of every REQ, NFR, and BR:** `docs/requirements.md`
 - **Why we chose something:** `docs/decisions.md`
 
@@ -41,7 +41,7 @@ Rules:
 - **Assign yourself** before moving a card to In progress.
 - **Limit work in progress** to two cards each, so work gets finished rather than half-started.
 - **Bugs go on the board too.** Put them at the top of Backlog if they block something.
-- **Drag the card to Done** yourself once its PR is merged and the change works on the deployed site. Paste the PR link into the card so the work is easy to find later.
+- **Link the PR to its issue** by writing `Closes #<issue>` in the PR description. The issue closes, and its card moves to Done, when the PR is merged. Check the change works on the deployed site afterwards.
 - At the weekly check-in, review the board together, reorder the Backlog, and pick what's next.
 
 Use `requirements.md` to look up the requirement IDs for a card. The board is the only place progress is tracked.
@@ -123,7 +123,7 @@ Tag each milestone on `main`: `git tag v0.1 && git push --tags`.
 
 ## Free-tier checks
 
-Everything runs on free plans, so once a month check the usage pages for Vercel, Neon, Vercel Blob, and Resend. If any of them is close to its limit, see SRS §6.5 for alternatives.
+Everything runs on free plans, so once a month check the usage pages for Vercel, Neon, Vercel Blob, and Brevo. If any of them is close to its limit, see SRS §6.5 for alternatives.
 
 ## AI use
 

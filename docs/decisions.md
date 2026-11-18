@@ -10,7 +10,7 @@ Every choice is limited by two constraints. **Everything has to run at $0 with n
 
 - **Choice:** a Next.js (TypeScript) app on Vercel's free Hobby plan. The API, recipe import, and daily cleanup all run as serverless functions.
 - **Why:** no card needed, and it can't bill us; usage pauses at the limit instead. It's always on, deploys straight from GitHub, and has no end date.
-- **Limits:** personal, non-commercial use only (BR-11). Cron jobs run at most once a day. Only a few hours of active CPU a month, which is part of why OCR runs in the browser (decision 5).
+- **Limits:** personal, non-commercial use only (BR-11). Scheduled jobs are limited on the free plan. Only a few hours of active CPU a month, which is part of why OCR runs in the browser (decision 5).
 - **Rejected:** spare laptop + Tailscale Funnel (our best backup plan, but uptime and backups depend on one home machine); Azure for Students (the credit ends); Oracle Cloud and Google Cloud free servers (need a card); Render (its free database expires after 30 days); Netlify (the site pauses when credits run out); Supabase (free projects pause after a week without activity). See SRS §6.5 for the full comparison.
 
 ## 2. Database: PostgreSQL 18 on Neon's free plan
@@ -78,10 +78,10 @@ Every choice is limited by two constraints. **Everything has to run at $0 with n
 - **Watch out:** GitHub pauses scheduled workflows after 60 days without repo activity, so after the class we need to check that backups are still running.
 - **Rejected:** a paid Neon plan with a longer restore window.
 
-## 11. Scheduled cleanup: one daily Vercel cron job
+## 11. Scheduled cleanup: one daily Vercel Schedule
 
-- **Choice:** a Vercel schedule in `vercel.json` (cleanup-unverified, 4 AM Central) calls an endpoint that deletes accounts never verified after 7 days (REQ-8.8).
-- **Why:** once a day is the most Vercel's free plan allows, and it's all this job needs.
+- **Choice:** a Vercel Schedule named `cleanup-unverified` in `vercel.json` calls `/api/cron/cleanup-unverified` every day at about 4 AM Central (`timezone: America/Chicago`, `requestMethod: GET`). It deletes accounts never verified after 7 days (REQ-8.8), plus expired sessions and old email links. Vercel sends `Authorization: Bearer <CRON_SECRET>`, and the route rejects anything else.
+- **Why:** a daily run is all this job needs. Vercel replaced Cron Jobs with Schedules (2026-11-17), which add time zones, run history, and a Run button in the dashboard. On the Hobby plan a schedule starts within a 15-minute window.
 - **Rejected:** a separate scheduler service.
 
 ## 12. Usage limits stored in the database
