@@ -1,6 +1,11 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "crons": [
-    { "path": "/api/cron/cleanup-unverified", "schedule": "0 10 * * *" }
-  ]
+  "schedules": {
+    "cleanup-unverified": {
+      "schedule": "0 4 * * *",
+      "timezone": "America/Chicago",
+      "path": "/api/cron/cleanup-unverified",
+      "requestMethod": "GET"
+    }
+  }
 }
