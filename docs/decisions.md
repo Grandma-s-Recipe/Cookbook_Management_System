@@ -80,7 +80,7 @@ Every choice is limited by two constraints. **Everything has to run at $0 with n
 
 ## 11. Scheduled cleanup: one daily Vercel cron job
 
-- **Choice:** a cron entry in `vercel.json` calls an endpoint that deletes accounts never verified after 7 days (REQ-8.8).
+- **Choice:** a Vercel schedule in `vercel.json` (cleanup-unverified, 4 AM Central) calls an endpoint that deletes accounts never verified after 7 days (REQ-8.8).
 - **Why:** once a day is the most Vercel's free plan allows, and it's all this job needs.
 - **Rejected:** a separate scheduler service.
 

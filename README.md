@@ -184,7 +184,7 @@ CI runs the lint and the full suite on every push and pull request.
 
 ## Deployment
 
-The `main` branch deploys automatically to Vercel. The daily cron in `vercel.json` calls `/api/cron/cleanup-unverified`, which deletes accounts never verified within 7 days, plus expired sessions and old email links.
+The `main` branch deploys automatically to Vercel. The Vercel Schedule in `vercel.json` (cleanup-unverified, 4 AM Central) calls `/api/cron/cleanup-unverified`, which deletes accounts never verified within 7 days, plus expired sessions and old email links.
 
 ## Backups
 
