@@ -53,6 +53,11 @@ export function appDb(): Sql {
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
 
+/** True for a well-formed id. Check ids from the address with this before querying. */
+export function isUuid(value: string): boolean {
+  return UUID.test(value)
+}
+
 /**
  * Run queries on a user's recipes, as that user (NFR-13, BR-9; decision 21).
  *
@@ -74,7 +79,7 @@ const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
  * first with crypto.randomUUID() and pass it to every query.
  */
 export async function asUser(userId: string, build: (sql: Sql) => Query[]): Promise<Row[][]> {
-  if (!UUID.test(userId)) throw new Error('asUser: userId must be a UUID')
+  if (!isUuid(userId)) throw new Error('asUser: userId must be a UUID')
   const sql = appDb()
   const results = await sql.transaction([
     sql`select set_config('app.user_id', ${userId}, true)`, // true: only for this transaction
