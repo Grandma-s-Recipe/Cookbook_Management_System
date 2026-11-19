@@ -149,6 +149,25 @@ Every choice is limited by two constraints. **Everything has to run at $0 with n
 
 ---
 
+## 21. 2026-11-18: User recipes and row-level security
+
+- **Choice:**
+  - User recipes live in `app.recipe`, `app.recipe_ingredient`, `app.recipe_step`, `app.tag`, and `app.recipe_tag` (SRS §6.2).
+  - Row-level security is on for all five tables. One policy on each allows a row only when `owner_id` is the current user. The app says who the user is at the start of every transaction with `set_config('app.user_id', …, true)`, through `asUser()` in `src/lib/db.ts`. If a query forgets `asUser()`, the user is unset and it sees **no** recipes. Queries also keep their own `where owner_id = …`, so there are two checks (NFR-13, BR-9).
+  - The policies apply to `forkful_app`, the site's role, because it doesn't own the tables and can't bypass row-level security. They are **not** forced on the owner (`neondb_owner`). The nightly `pg_dump` and any `pg_restore` run as the owner, and a forced policy would make them fail or dump zero rows.
+  - The 100-recipe limit (BR-10) is checked by a database trigger that reads `recipe_cap` from `app.settings` (decision 12). It raises error code `FKCAP`, which `isLibraryFull()` recognizes. The app still checks first, to show the message before the user starts.
+  - "Modified" and "Original updated" (REQ-2.3, REQ-2.6) use content hashes from `src/lib/recipes/hash.ts`. `forkful_app` can't read the catalog, so the app reads the catalog side with `catalogDb()` and compares in code. Only content counts (title, description, cuisine, servings, times, ingredients, steps), not the user's tags, notes, or photo.
+- **Why:** row-level security makes the database refuse other users' rows even if a query has a bug. `set_config` with `true` lasts for just one transaction, so it's safe with Neon's pooled connections.
+- **Additions to SRS §6.2** (add them in the next SRS revision, with Figure B-9):
+  - `recipe.source_site` and `recipe.source_url`, copied from the catalog, so a copy can show its source (BR-8) without reading the catalog
+  - `recipe.content_hash`, the copy's current hash, for "Modified"
+  - `owner_id` on `recipe_ingredient`, `recipe_step`, and `recipe_tag`. Child rows point at `(recipe_id, owner_id)`, so they can't belong to one user while hanging off another user's recipe, and every policy is the same simple check.
+  - `recipe_ingredient.quantity_max`, as in the catalog (decision 20)
+- **Difference from SRS §6.2:** `recipe.source_catalog_id` is a plain column, **not** a foreign key to `catalog.recipe`. Copies must outlive their original (BR-6, REQ-2.6), and the `app` and `catalog` schemas stay separate (decision 3). A missing or removed original shows "Original no longer available".
+- **Rejected:** a separate database role for each user (Neon's free plan and serverless connections don't suit it); checking ownership only in app code (one missed `where` would leak recipes); forcing row-level security on the owner (breaks backups, as above).
+
+---
+
 ## If a free plan changes
 
 If a provider lowers its free limits:
