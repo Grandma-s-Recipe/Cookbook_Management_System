@@ -69,6 +69,9 @@ async function RecipeContent({ params, searchParams }: { params: Params; searchP
           Saved to your Library. This copy is yours: change anything you like with Edit recipe.
         </p>
       )}
+      {query.created === '1' && (
+        <p className="notice notice-ok" role="status">Your private recipe was saved to your Library. Only you can see it.</p>
+      )}
       {query.updated === '1' && (
         <p className="notice notice-ok" role="status">Your changes were saved.</p>
       )}
@@ -78,6 +81,7 @@ async function RecipeContent({ params, searchParams }: { params: Params; searchP
         actions={
           <>
             <Link href={`/recipe/${recipe.id}/edit`} className="button-link">Edit recipe</Link>
+            <Link href={`/library/delete?id=${recipe.id}`}>Delete</Link>
             <Link href="/library">Back to my Library</Link>
           </>
         }

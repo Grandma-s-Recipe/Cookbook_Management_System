@@ -44,6 +44,9 @@ export type RecipeInput = {
  */
 export type FormErrors = Record<string, string>
 
+/** What a recipe form's server action sends back when the save didn't happen. */
+export type RecipeFormState = { message?: string; errors?: FormErrors }
+
 /** What the form holds: everything as typed. */
 export type RecipeDraft = {
   title: string
@@ -205,5 +208,21 @@ export function parseRecipeForm(form: FormData): { input: RecipeInput; errors: F
       steps,
     },
     errors,
+  }
+}
+
+/** An empty form, for a new recipe: one blank ingredient row and one blank step. */
+export function emptyDraft(): RecipeDraft {
+  return {
+    title: '',
+    description: '',
+    cuisine: '',
+    servings: '',
+    prepMinutes: '',
+    cookMinutes: '',
+    notes: '',
+    tags: '',
+    ingredients: [{ quantity: '', quantityMax: '', unit: '', name: '', note: '' }],
+    steps: [''],
   }
 }

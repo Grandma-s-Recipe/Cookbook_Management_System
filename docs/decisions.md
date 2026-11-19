@@ -204,6 +204,17 @@ Every choice is limited by two constraints. **Everything has to run at $0 with n
 
 ---
 
+## 25. 2026-11-19: Library, private recipes, and delete
+
+- **Library** (`/library`, REQ-10.1–10.6): every saved copy and private recipe, labeled "Saved copy" or "Private", with "Modified". Search matches the title, any ingredient, or any tag, ignoring case. Filter by one tag. Sort by last changed (the default), date added, or title. The count ("You're using 12 of 100 recipes") and the warning use `recipe_cap` and `recipe_warning_at` from `app.settings`. One database request (NFR-5): about 2 ms in the database with 100 recipes locally, and `tests/library.test.ts` checks it stays under 2 seconds on Neon.
+- **Tags** (REQ-10.4) are added and removed on the recipe's edit page, and used as a filter in the Library. Tag names are unique per user regardless of case, so "Dinner" and "dinner" are one tag. A tag no longer on any recipe stays in the database but isn't shown.
+- **New private recipe** (`/recipe/new`, REQ-3.1–3.6, 3.9) uses the same form as editing (`src/components/RecipeForm.tsx`) and the same checks (`src/lib/recipes/form.ts`). It's blocked with "Your Library is full (N of N recipes)" at the limit.
+- **Drafts in the browser** (NFR-9): while typing, the form keeps unsaved changes in this browser's local storage, one draft per recipe being edited and one for a new recipe, per user. When the form is opened again, it offers "Restore my changes" or "Discard them". The draft is removed when the recipe is saved or the changes are discarded. Trade-off: on a shared computer, an unsaved draft stays in that browser until it's saved or discarded. Leaving with unsaved changes asks first (NFR-10, REQ-3.5).
+- **Delete** (REQ-5.1–5.5): from a recipe's Delete link (one recipe) or the Library's checkboxes (several, REQ-5.4). Both go to a confirmation page, `/library/delete`, that lists the titles (REQ-5.2). Only then is anything deleted, permanently, with its ingredients, steps, and tags. Only the user's own recipes can be listed or deleted; other ids are ignored. Catalog recipes are never touched (REQ-5.3). Deleting stored photos comes with the photos issue in M3.
+- **Why a confirmation page instead of a pop-up:** it works without JavaScript and with a keyboard or screen reader, and shows exactly what will be deleted.
+
+---
+
 ## If a free plan changes
 
 If a provider lowers its free limits:

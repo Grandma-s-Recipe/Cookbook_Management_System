@@ -6,11 +6,12 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound, redirect } from 'next/navigation'
 import { Suspense } from 'react'
+import { RecipeForm } from '@/components/RecipeForm'
 import { getCurrentUser } from '@/lib/auth/session'
 import { getOwnRecipe } from '@/lib/library'
 import { draftFromRecipe } from '@/lib/recipes/form'
 import type { RecipeView } from '@/lib/recipes/view'
-import { RecipeEditForm } from './RecipeEditForm'
+import { updateRecipeAction } from '../actions'
 
 export const metadata: Metadata = { title: 'Edit recipe' }
 
@@ -57,7 +58,14 @@ async function EditContent({ params }: { params: Params }) {
           : 'This is your private recipe. Only you can see it.'}{' '}
         Fields marked * are required.
       </p>
-      <RecipeEditForm recipeId={recipe.id} initial={draftFromRecipe(recipe)} />
+      <RecipeForm
+        action={updateRecipeAction}
+        recipeId={recipe.id}
+        initial={draftFromRecipe(recipe)}
+        draftKey={`forkful:draft:edit:${recipe.id}`}
+        cancelHref={`/recipe/${recipe.id}`}
+        submitLabel="Save changes"
+      />
     </>
   )
 }

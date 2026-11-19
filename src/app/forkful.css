@@ -121,3 +121,14 @@ button:disabled { opacity: 0.6; cursor: wait; }
 button.secondary { background: #fff; color: var(--ff-accent-dark); border: 1px solid var(--ff-accent); }
 .form .actions button { margin-top: 0; }
 .form .actions { margin-top: 1rem; }
+
+/* Library (REQ-10.1–10.6) and delete (REQ-5.1–5.5) */
+.library-bar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 0.5rem 1rem; margin-bottom: 0.5rem; }
+.library-bar .notice, .library-bar .hint { margin: 0; }
+.library-items { list-style: none; padding: 0; margin: 0 0 1rem; }
+.library-item { display: flex; gap: 0.75rem; align-items: flex-start; border-bottom: 1px solid var(--ff-border); padding: 0.75rem 0; }
+.library-item input[type='checkbox'] { margin-top: 0.35rem; width: 1.1rem; height: 1.1rem; flex-shrink: 0; }
+.library-item h2 { font-size: 1.1rem; margin: 0 0 0.25rem; overflow-wrap: anywhere; }
+.library-item h2 a { text-decoration: none; }
+.library-item h2 a:hover { text-decoration: underline; }
+button.danger { background: var(--ff-error); }

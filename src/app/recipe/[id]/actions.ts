@@ -7,7 +7,7 @@ import { getCurrentUser } from '@/lib/auth/session'
 import { getCatalogRecipe } from '@/lib/catalog'
 import { isLibraryFull } from '@/lib/db'
 import { getSaveCopyStatus, libraryFullMessage, saveCopy, updateOwnRecipe } from '@/lib/library'
-import { parseRecipeForm, type FormErrors } from '@/lib/recipes/form'
+import { parseRecipeForm, type RecipeFormState } from '@/lib/recipes/form'
 
 export type SaveCopyState = {
   error?: string
@@ -44,9 +44,7 @@ export async function saveCopyAction(_prev: SaveCopyState, form: FormData): Prom
   redirect(`/recipe/${newId}?saved=1`) // outside the try: redirect() works by throwing
 }
 
-export type EditState = { message?: string; errors?: FormErrors }
-
-export async function updateRecipeAction(_prev: EditState, form: FormData): Promise<EditState> {
+export async function updateRecipeAction(_prev: RecipeFormState, form: FormData): Promise<RecipeFormState> {
   const recipeId = String(form.get('recipeId') ?? '')
 
   const user = await getCurrentUser()
