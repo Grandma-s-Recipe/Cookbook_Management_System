@@ -168,6 +168,28 @@ Every choice is limited by two constraints. **Everything has to run at $0 with n
 
 ---
 
+## 22. 2026-11-18: How catalog search matches and sorts
+
+- **Choice:**
+  - Search words match the title, cuisine, and description with full-text search (decision 6), **or** a title that is close to the words typed (`pg_trgm` word similarity of 0.5 or more, set per search in `src/lib/catalog.ts`). At pg_trgm's default of 0.6, two typos like "chiken cury" found nothing; 0.5 finds "Chicken Curry".
+  - "Best match" (REQ-1.6 "relevance") ranks by the full-text score plus the title similarity. With no search words it falls back to title order. "Newest" uses the date a recipe was added to the catalog (`parsed_at`).
+  - Ticking several tags shows recipes that have **all** of them. One cuisine at a time. Tags are filters only; search words don't match tags.
+  - The whole search lives in the page address (`?q=…&cuisine=…&tag=…&sort=…&page=…`), so a search can be bookmarked or shared, and the form works without JavaScript.
+  - One request to the database per search: the results page (with the total), the cuisine list, and the 40 most used tags.
+- **Why:** meets NFR-1 and NFR-7 with room to spare. On a local test with 20,000 generated recipes, every search took 100 ms or less in the database.
+- **Trade-offs:** a lower similarity threshold also lets in some weaker title matches, but they rank below the closer ones.
+
+---
+
+## 23. 2026-11-18: One recipe page for catalog and own recipes
+
+- **Choice:** `/recipe/<id>` shows a catalog recipe to anyone, or one of the logged-in user's own recipes (saved copy or private) to that user only. All three use one layout, `src/components/RecipeDetail.tsx` (REQ-1.5). An unknown id, a removed catalog recipe, and another user's private recipe all show the same "Recipe not found" page.
+- **Why:** one address and one layout for every recipe, so the Library, search, and later Cooking Mode can all link the same way. Giving the same answer for "doesn't exist" and "not yours" means the page never reveals that someone else's private recipe exists (REQ-3.2, NFR-17).
+- **How:** the catalog is checked first with `catalogDb()`; only if the id isn't there, and someone is logged in, is their own Library checked through `asUser()`. Malformed ids never reach the database (`isUuid()`).
+- **For now:** ingredient lines show as written (`raw_text`); scaling and units come in M3. The browser tab says "Recipe" rather than the recipe's name.
+
+---
+
 ## If a free plan changes
 
 If a provider lowers its free limits:

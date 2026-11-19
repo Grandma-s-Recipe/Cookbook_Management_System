@@ -23,8 +23,8 @@ Features planned for later are listed in Appendix E of the SRS.
 
 | Milestone | Status |
 | --- | --- |
-| M1: Skeleton (deployed app, schema, seed catalog, accounts) | In progress |
-| M2: Core (catalog search, save a copy, Library, private recipes) | Not started |
+| M1: Skeleton (deployed app, schema, seed catalog, accounts) | Done |
+| M2: Core (catalog search, save a copy, Library, private recipes) | In Progress |
 | M3: Complete (OCR, scaling and units, admin, import, cooking mode) | Not started |
 
 ## Tech stack
@@ -176,15 +176,42 @@ Free emails include a small "Sent with Brevo" footer, and may land in spam becau
 Tests live in `tests/` and run with Jest (configured through `next/jest`). Some tests check specific requirements:
 
 - **Accounts:** password, username, and email rules (REQ-8.5), safe login redirects, and session tokens
-- **Privacy:** no private recipe or saved copy ever appears in catalog search or on a public page (NFR-17) _(M2)_
+- **Catalog search:** `tests/catalog-query.test.ts` checks how the address is read and rebuilt. `tests/catalog-search.test.ts` runs real searches: 20 per page, cuisine and tag filters, A–Z order, typos still matching, and no results (REQ-1.1–1.4, 1.6, 1.7, NFR-1).
+- **Recipe page:** `tests/recipe-page.test.ts` loads a catalog recipe with its source, ingredients, and steps in order, and checks that a private recipe is visible to its owner only and never found as a catalog recipe (REQ-1.5, REQ-3.2, NFR-17). `tests/recipe-view.test.ts` covers the small display helpers.
+- **Privacy and ownership:** `tests/recipe-rls.test.ts` checks that a user can't read, change, or delete another user's recipes, that the catalog roles can't reach the `app` schema at all, so private recipes and saved copies can't appear in catalog search (NFR-13, NFR-17, BR-9), and that the 100-recipe limit and account deletion work. It needs the database test branch, below.
 - **Unit conversion:** at least 50 scaling and conversion cases, each within 1% of the exact value (NFR-31) _(M3)_
 - **OCR:** a set of printed 300-DPI recipe scans, with at least 90% character accuracy (NFR-20) _(M3)_
 
-CI runs the lint and the full suite on every push and pull request.
+CI runs the lint and the full suite on every push and pull request. The database tests are skipped in CI for now.
+
+### Database tests (Neon `test` branch)
+
+The row-level security tests use a real database: a Neon branch called `test`, connected as `forkful_app`, the same role the site uses. Without the connection string, those tests are skipped and everything else still runs.
+
+1. In the Neon Console, open the project, go to **Branches**, and click **Create branch**. Name it `test`, with `main` as the parent. The branch copies the roles and their passwords.
+2. Apply the schema to the branch: open the **SQL Editor**, pick the `test` branch in the branch menu at the top, paste the whole of `db/schema.sql`, and run it. Do this again whenever `schema.sql` changes.
+3. Find the test branch's **pooled host**: on the project **Dashboard**, click **Connect**, choose the `test` branch, and turn on **Connection pooling**. The host is the part after `@` and before `/neondb`; it contains `-pooler`.
+4. Copy your `DATABASE_URL_APP` value from `.env.local` and change **only the host** to the test branch's pooled host. The user (`forkful_app`) and password stay the same, because the branch copied them.
+5. Do the same with your `DATABASE_URL_CATALOG_READ`: change only its host to the same test branch host.
+6. Put both in a file named `.env.test.local` in the project folder (Jest reads this file; it does not read `.env.local`):
+
+   ```text
+   DATABASE_URL_TEST=<your DATABASE_URL_APP with the test branch's pooled host>
+   DATABASE_URL_TEST_CATALOG_READ=<your DATABASE_URL_CATALOG_READ with the test branch's pooled host>
+   ```
+
+7. Run `npm test`.
+
+| Variable | Role | Used by |
+| --- | --- | --- |
+| `DATABASE_URL_TEST` | `forkful_app` | `tests/recipe-rls.test.ts`, `tests/recipe-page.test.ts` |
+| `DATABASE_URL_TEST_CATALOG_READ` | `catalog_reader` | `tests/catalog-search.test.ts`, `tests/recipe-page.test.ts` (need the seed recipes on the test branch) |
+
+Each test file is skipped when its variable is missing, and refuses to run if its variable has the same host as the real one (`DATABASE_URL_APP` or `DATABASE_URL_CATALOG_READ`), so it can't touch the real data. The database tests create users named `rlstest_…` and `pagetest_…` and delete them at the end. The catalog tests only read.
 
 ## Deployment
 
-The `main` branch deploys automatically to Vercel. The Vercel Schedule in `vercel.json` (cleanup-unverified, 4 AM Central) calls `/api/cron/cleanup-unverified`, which deletes accounts never verified within 7 days, plus expired sessions and old email links.
+The `main` branch deploys automatically to Vercel. A daily Vercel Schedule in `vercel.json` (`cleanup-unverified`, about 4 AM Central) calls `/api/cron/cleanup-unverified`, which deletes accounts never verified within 7 days, plus expired sessions and old email links.
 
 ## Backups
 
