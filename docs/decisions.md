@@ -190,6 +190,20 @@ Every choice is limited by two constraints. **Everything has to run at $0 with n
 
 ---
 
+## 24. 2026-11-18: Saving and editing copies
+
+- **Choice:**
+  - **Save a Copy** (REQ-2.1) reads the catalog recipe again when it's clicked, so a recipe removed a moment ago shows "Recipe not found/unavailable" and nothing is saved (REQ-2.4). The copy gets every field, ingredient, and step, plus the catalog's tags as the user's own tags.
+  - **Already have a copy** (REQ-2.5): the recipe page says so, with "Open my copy", and the button becomes "Save another copy".
+  - **The 100-recipe limit** (REQ-2.7) reads `recipe_cap` from `app.settings`. When the Library is full, the button is replaced by "Your Library is full (N of N recipes)" and a link to the Library. The database trigger from decision 21 catches two clicks at once.
+  - **Editing** (REQ-2.2) is at `/recipe/<id>/edit`, for saved copies and private recipes. Saving replaces all the recipe's fields, ingredients, steps, and tags in one transaction. Leaving with unsaved changes asks first (NFR-10). If the session ran out while editing, the form keeps the changes and says to log in again in another tab.
+  - **"Modified"** compares each ingredient as the line shown on the page ("1 1/2 cup flour, sifted"), not the text first imported. So saving a copy without real changes never marks it Modified, and changing it back clears it. This updates the hash described in decision 21.
+  - **The form rules** (`src/lib/recipes/form.ts`) are written once, for this form, "New private recipe", and the OCR review screen (REQ-3.3, REQ-4.8).
+- **Tests:** `npm test` now runs test files one at a time (`--runInBand`). Several database tests change the shared `recipe_cap` setting for a moment, and would interfere if they ran together.
+- **Speed (NFR-4):** a save is one transaction (an edit is a quick ownership check and then the transaction). `tests/save-copy.test.ts` checks both finish within 5 seconds.
+
+---
+
 ## If a free plan changes
 
 If a provider lowers its free limits:

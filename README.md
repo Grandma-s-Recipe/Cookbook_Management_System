@@ -178,6 +178,7 @@ Tests live in `tests/` and run with Jest (configured through `next/jest`). Some 
 - **Accounts:** password, username, and email rules (REQ-8.5), safe login redirects, and session tokens
 - **Catalog search:** `tests/catalog-query.test.ts` checks how the address is read and rebuilt. `tests/catalog-search.test.ts` runs real searches: 20 per page, cuisine and tag filters, A–Z order, typos still matching, and no results (REQ-1.1–1.4, 1.6, 1.7, NFR-1).
 - **Recipe page:** `tests/recipe-page.test.ts` loads a catalog recipe with its source, ingredients, and steps in order, and checks that a private recipe is visible to its owner only and never found as a catalog recipe (REQ-1.5, REQ-3.2, NFR-17). `tests/recipe-view.test.ts` covers the small display helpers.
+- **Save a copy and edit it:** `tests/save-copy.test.ts` saves and edits copies on the test branch: every field copied and editable, "Modified" only after real changes, other users can't see or edit them, the 100-recipe limit, and saves within 5 seconds (REQ-2.1–2.3, 2.5–2.7, NFR-4). `tests/recipe-form.test.ts` and `tests/ingredients.test.ts` cover the form rules and ingredient amounts (REQ-3.3, REQ-3.9).
 - **Privacy and ownership:** `tests/recipe-rls.test.ts` checks that a user can't read, change, or delete another user's recipes, that the catalog roles can't reach the `app` schema at all, so private recipes and saved copies can't appear in catalog search (NFR-13, NFR-17, BR-9), and that the 100-recipe limit and account deletion work. It needs the database test branch, below.
 - **Unit conversion:** at least 50 scaling and conversion cases, each within 1% of the exact value (NFR-31) _(M3)_
 - **OCR:** a set of printed 300-DPI recipe scans, with at least 90% character accuracy (NFR-20) _(M3)_
@@ -204,10 +205,10 @@ The row-level security tests use a real database: a Neon branch called `test`, c
 
 | Variable | Role | Used by |
 | --- | --- | --- |
-| `DATABASE_URL_TEST` | `forkful_app` | `tests/recipe-rls.test.ts`, `tests/recipe-page.test.ts` |
+| `DATABASE_URL_TEST` | `forkful_app` | `tests/recipe-rls.test.ts`, `tests/recipe-page.test.ts`, `tests/save-copy.test.ts` |
 | `DATABASE_URL_TEST_CATALOG_READ` | `catalog_reader` | `tests/catalog-search.test.ts`, `tests/recipe-page.test.ts` (need the seed recipes on the test branch) |
 
-Each test file is skipped when its variable is missing, and refuses to run if its variable has the same host as the real one (`DATABASE_URL_APP` or `DATABASE_URL_CATALOG_READ`), so it can't touch the real data. The database tests create users named `rlstest_…` and `pagetest_…` and delete them at the end. The catalog tests only read.
+Each test file is skipped when its variable is missing, and refuses to run if its variable has the same host as the real one (`DATABASE_URL_APP` or `DATABASE_URL_CATALOG_READ`), so it can't touch the real data. The database tests create users named `rlstest_…`, `pagetest_…`, and `copytest_…` and delete them at the end. `npm test` runs the test files one at a time, because some of them change the shared recipe limit for a moment. The catalog tests only read.
 
 ## Deployment
 

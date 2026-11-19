@@ -1,6 +1,8 @@
 // What a recipe page shows. Catalog recipes, saved copies, and private recipes
 // all become a RecipeView, so they share one page layout (REQ-1.5).
 
+import type { RecipeContent } from '@/lib/recipes/hash'
+
 export type RecipeKind = 'catalog' | 'saved_copy' | 'private'
 
 export type IngredientLine = {
@@ -28,6 +30,21 @@ export type RecipeView = {
   ingredients: IngredientLine[]
   steps: string[]
   modified: boolean // saved copies changed since saving (REQ-2.3)
+  copyOf: { catalogId: string; sourceHash: string } | null // saved copies only (REQ-2.6)
+}
+
+/** The parts of a recipe that count for "Modified" and "Original updated" (see hash.ts). */
+export function toRecipeContent(r: RecipeView): RecipeContent {
+  return {
+    title: r.title,
+    description: r.description,
+    cuisine: r.cuisine,
+    servings: r.servings,
+    prepMinutes: r.prepMinutes,
+    cookMinutes: r.cookMinutes,
+    ingredients: r.ingredients,
+    steps: r.steps,
+  }
 }
 
 /** "45 min", "1 hr", "1 hr 15 min". Null for no time. */

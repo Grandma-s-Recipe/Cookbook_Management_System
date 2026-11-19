@@ -2,11 +2,23 @@
 // (REQ-1.5). The page passes in its buttons as `actions`.
 // The photo, servings control, unit toggle, and Cooking Mode come with their M3 issues.
 
+import Link from 'next/link'
 import type { ReactNode } from 'react'
 import { isWebLink } from '@/lib/catalog'
 import { formatMinutes, totalMinutes, type RecipeView } from '@/lib/recipes/view'
 
-export function RecipeDetail({ recipe: r, actions }: { recipe: RecipeView; actions?: ReactNode }) {
+/** For a saved copy: how the catalog original compares now (REQ-2.6). */
+export type OriginalStatus = { status: 'same' | 'updated' | 'unavailable'; catalogId: string }
+
+export function RecipeDetail({
+  recipe: r,
+  actions,
+  original,
+}: {
+  recipe: RecipeView
+  actions?: ReactNode
+  original?: OriginalStatus | null
+}) {
   const facts: [string, string][] = []
   if (r.cuisine) facts.push(['Cuisine', r.cuisine])
   if (r.servings) facts.push(['Servings', String(r.servings)])
@@ -24,8 +36,19 @@ export function RecipeDetail({ recipe: r, actions }: { recipe: RecipeView; actio
           <p className="recipe-labels">
             <span className="label">{r.kind === 'saved_copy' ? 'Saved copy' : 'Private'}</span>
             {r.modified && <span className="label label-modified">Modified</span>}
+            {original?.status === 'updated' && <span className="label">Original updated</span>}
+            {original?.status === 'unavailable' && <span className="label">Original no longer available</span>}
             <span className="hint">Only you can see this recipe.</span>
           </p>
+        )}
+        {original?.status === 'updated' && (
+          <p className="hint">
+            The catalog recipe you copied has changed since you saved this copy. Your copy stays as it is.{' '}
+            <Link href={`/recipe/${original.catalogId}`}>See the current original</Link>
+          </p>
+        )}
+        {original?.status === 'unavailable' && (
+          <p className="hint">The catalog recipe you copied has been removed. Your copy is safe and stays in your Library.</p>
         )}
         <h1>{r.title}</h1>
         {r.description && <p className="lead">{r.description}</p>}

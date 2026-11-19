@@ -226,6 +226,7 @@ export async function getCatalogRecipe(id: string): Promise<RecipeView | null> {
     ingredients: ingredients.map(toIngredientLine),
     steps: steps.map((s) => s.text),
     modified: false,
+    copyOf: null,
   }
 }
 

@@ -50,6 +50,22 @@ test('any real change gives a different hash', () => {
   ).not.toBe(base)
 })
 
+test('an unchanged ingredient line hashes the same however its text was first written', () => {
+  const imported: RecipeContent = {
+    ...soup,
+    ingredients: [
+      { ...soup.ingredients[0], rawText: '2 Tbsp. olive oil' }, // original text from a website
+      { ...soup.ingredients[1], rawText: '1½ to 2 pounds tomatoes (chopped)' },
+    ],
+  }
+  expect(recipeContentHash(imported)).toBe(recipeContentHash(soup))
+  // A line that could never be split still counts by its text.
+  const unsplit: RecipeContent = { ...soup, ingredients: [{ quantity: null, rawText: 'Salt to taste' }] }
+  expect(recipeContentHash({ ...unsplit, ingredients: [{ quantity: null, name: 'Salt to taste', rawText: 'x' }] })).toBe(
+    recipeContentHash(unsplit),
+  )
+})
+
 test('a value cannot move between fields without changing the hash', () => {
   expect(recipeContentHash({ ...soup, description: null, cuisine: 'Quick and warm.' })).not.toBe(
     recipeContentHash({ ...soup, description: 'Quick and warm.', cuisine: null }),

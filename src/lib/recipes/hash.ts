@@ -12,8 +12,10 @@
 //
 // Only the recipe's content counts: title, description, cuisine, servings, times,
 // ingredients and steps. The user's tags, notes and photo don't make a copy "Modified".
+// An ingredient counts as the line shown on the page ("1 1/2 cup flour, sifted").
 
 import { createHash } from 'node:crypto'
+import { ingredientText } from '@/lib/recipes/ingredients'
 
 type Num = number | string | null | undefined // the database driver returns numeric columns as strings
 type Text = string | null | undefined
@@ -62,7 +64,9 @@ export function recipeContentHash(r: RecipeContent): string {
     num(r.servings),
     num(r.prepMinutes),
     num(r.cookMinutes),
-    r.ingredients.map((i) => [num(i.quantity), num(i.quantityMax), text(i.unit), text(i.name), text(i.note), text(i.rawText)]),
+    // Each line as it's shown (quantity, unit, name, note), so re-saving an
+    // unchanged line never counts as a change, however it was first written.
+    r.ingredients.map((i) => text(ingredientText(i))),
     r.steps.map(text),
   ]
   return `${VERSION}:${createHash('sha256').update(JSON.stringify(canonical)).digest('hex')}`
