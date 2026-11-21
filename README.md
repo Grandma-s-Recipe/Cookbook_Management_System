@@ -24,8 +24,8 @@ Features planned for later are listed in Appendix E of the SRS.
 | Milestone | Status |
 | --- | --- |
 | M1: Skeleton (deployed app, schema, seed catalog, accounts) | Done |
-| M2: Core (catalog search, save a copy, Library, private recipes) | In Progress |
-| M3: Complete (OCR, scaling and units, admin, import, cooking mode) | Not started |
+| M2: Core (catalog search, save a copy, Library, private recipes) | Done |
+| M3: Complete (OCR, scaling and units, admin, import, cooking mode) | In Progress |
 
 ## Tech stack
 
