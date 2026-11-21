@@ -225,14 +225,13 @@ const all = parseLibraryQuery({})
   test('a full Library blocks a new private recipe (REQ-3.6)', async () => {
     const full = await makeUser('full')
     await createPrivateRecipe(full, privateRecipe())
-    const [{ value: before }] = await appDb()`select value from app.settings where key = 'recipe_cap'`
     try {
       await appDb()`update app.settings set value = '1' where key = 'recipe_cap'`
       expect(await getLibraryUsage(full)).toMatchObject({ used: 1, cap: 1, full: true })
       const err = await createPrivateRecipe(full, privateRecipe({ title: 'One too many' })).catch((e: unknown) => e)
       expect(isLibraryFull(err)).toBe(true)
     } finally {
-      await appDb()`update app.settings set value = ${JSON.stringify(before)}::jsonb where key = 'recipe_cap'`
+      await appDb()`update app.settings set value = '100' where key = 'recipe_cap'`
     }
   })
 })

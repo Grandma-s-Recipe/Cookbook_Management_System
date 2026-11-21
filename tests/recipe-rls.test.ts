@@ -177,7 +177,6 @@ describeDb('user recipes: row-level security (needs DATABASE_URL_TEST)', () => {
   })
 
   test('the recipe limit comes from app.settings and is enforced by the database (BR-10)', async () => {
-    const [{ value: before }] = await appDb()`select value from app.settings where key = 'recipe_cap'`
     const c = await makeUser('c') // has 1 recipe
     try {
       await appDb()`update app.settings set value = '2' where key = 'recipe_cap'`
@@ -195,7 +194,7 @@ describeDb('user recipes: row-level security (needs DATABASE_URL_TEST)', () => {
       const [[{ n }]] = await asUser(c.id, (sql) => [sql`select count(*)::int as n from app.recipe where owner_id = ${c.id}`])
       expect(n).toBe(2)
     } finally {
-      await appDb()`update app.settings set value = ${JSON.stringify(before)}::jsonb where key = 'recipe_cap'`
+      await appDb()`update app.settings set value = '100' where key = 'recipe_cap'`
     }
   })
 

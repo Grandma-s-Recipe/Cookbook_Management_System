@@ -224,7 +224,6 @@ function asInput(r: RecipeView): RecipeInput {
     const full = await makeUser('full')
     const original = catalogRecipe()
     await saveCopy(full, original) // 1 recipe
-    const [{ value: before }] = await appDb()`select value from app.settings where key = 'recipe_cap'`
     try {
       await appDb()`update app.settings set value = '1' where key = 'recipe_cap'`
       const status = await getSaveCopyStatus(full, original.id)
@@ -234,7 +233,7 @@ function asInput(r: RecipeView): RecipeInput {
       expect(isLibraryFull(err)).toBe(true)
       expect((await getSaveCopyStatus(full, original.id)).used).toBe(1) // nothing was saved
     } finally {
-      await appDb()`update app.settings set value = ${JSON.stringify(before)}::jsonb where key = 'recipe_cap'`
+      await appDb()`update app.settings set value = '100' where key = 'recipe_cap'`
     }
   })
 })
